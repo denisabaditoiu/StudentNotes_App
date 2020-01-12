@@ -1,0 +1,130 @@
+swagger: "2.0"
+
+info:
+  version: "1.0.0"
+  title: backend
+
+# during dev, should point to your local machine
+host: localhost:3001
+
+basePath: /
+
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+
+consumes:
+  - application/json
+  - multipart/form-data
+
+produces:
+  - application/json
+
+paths:
+  /register:
+    x-swagger-router-controller: authentication
+    post:
+      description: Register a user
+      operationId: register
+      parameters:
+        - name: user
+          description: Object with the register data
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+              fullName:
+                type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /notes:
+    x-swagger-router-controller: notes
+    post:
+      description: Adds a new post
+      operationId: addNote
+      parameters:
+        - name: note
+          description: Object with the register data
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              noteType:
+                type: string
+              textNote:
+                type: string
+              name:
+                type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      description: Get all notes
+        operationId: findAll
+        responses:
+          "200":
+            description: Success
+            schema:
+              $ref: "#/definitions/SuccessResponse"
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
+
+  /notes/{noteId}:
+    x-swagger-router-controller: notes
+    get:
+      description: Adds a new post
+      operationId: getNoteById
+      parameters:
+        - name: noteId
+          description: Object with the register data
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  SuccessResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
